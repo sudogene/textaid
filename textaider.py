@@ -12,8 +12,9 @@ def add_line_number(filename, num_spaces=2):
     
     new_content = [f'{i + 1}{spaces}{file_content[i]}' for i in range(len(file_content))]
     
-    with open('aided_' + filename, 'w') as new_file:
-        new_file.writelines(new_content)
+    name = filename.split('.')[0]
+    with open('a_' + name + '.txt', 'w') as file:
+        file.writelines(new_content)
     
     print(SUCCESS_MSG)
     
@@ -38,18 +39,18 @@ def color(text, ctype):
     return f'{COLOR[ctype.upper()]} {text} {END}'
 
 
-def convert_to_fasta(filename, max_char=70):
+def convert_to_fasta(filename, header='textaid', max_char=70):
     """
     Converts a single line of text into fasta format (paragraphed).
     """
     with open(filename) as file:
-        text = file.readlines
+        text = file.readlines()[0]
 
-    paragraphed_text = [text[i : i + max_char] for i in range(0, len(text), max_char)]
-    to_write = list(map(lambda s: s + '\n', paragraphed_text))
+    formatted = [text[i : i + max_char] + '\n' for i in range(0, len(text), max_char)]
 
-    with open('converted.fasta', 'w') as file:
-        file.write('>textaided\n')
-        file.writelines(to_write)
+    name = filename.split('.')[0]
+    with open('a_' + name + '.fasta', 'w') as file:
+        file.write(f'>{header}\n')
+        file.writelines(formatted)
     
     print(SUCCESS_MSG)
